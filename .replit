@@ -1,0 +1,52 @@
+modules = ["java"]
+
+[nix]
+channel = "stable-24_05"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Finance Manager App"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "run_finance_manager"
+
+[[workflows.workflow]]
+name = "Finance Manager App"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "javac -cp \".:sqlite-jdbc-3.36.0.3.jar\" -d out $(find src -name \"*.java\") && java -cp \"out:sqlite-jdbc-3.36.0.3.jar\" com.financemanager.Main"
+waitForPort = 5000
+
+[[workflows.workflow]]
+name = "run_finance_manager"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd $(pwd) && java -cp .:target/classes:target/dependency/* com.financemanager.Main"
+
+[deployment]
+run = ["sh", "-c", "javac -cp \".:sqlite-jdbc-3.36.0.3.jar\" -d out $(find src -name \"*.java\") && java -cp \"out:sqlite-jdbc-3.36.0.3.jar\" com.financemanager.Main"]
