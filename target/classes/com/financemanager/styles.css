@@ -1,0 +1,168 @@
+/* 
+    Personal Finance Manager Stylesheet
+*/
+
+/* Main application background */
+.background {
+    -fx-background-color: #f5f5f5;
+}
+
+/* Title label */
+.title-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+/* Summary labels */
+.total-income {
+    -fx-font-size: 16px;
+    -fx-text-fill: #27ae60;
+}
+
+.total-expense {
+    -fx-font-size: 16px;
+    -fx-text-fill: #c0392b;
+}
+
+.balance {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+/* Form controls */
+.label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #34495e;
+}
+
+.text-field, .date-picker, .combo-box {
+    -fx-background-color: white;
+    -fx-border-color: #bdc3c7;
+    -fx-border-radius: 3px;
+    -fx-font-size: 14px;
+}
+
+.text-field:focused, .date-picker:focused, .combo-box:focused {
+    -fx-border-color: #3498db;
+}
+
+/* Action buttons */
+.button {
+    -fx-background-radius: 3px;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-padding: 5px 10px;
+}
+
+.add-button {
+    -fx-background-color: #2ecc71;
+    -fx-text-fill: white;
+}
+
+.add-button:hover {
+    -fx-background-color: #27ae60;
+}
+
+.update-button {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+}
+
+.update-button:hover {
+    -fx-background-color: #2980b9;
+}
+
+.delete-button {
+    -fx-background-color: #e74c3c;
+    -fx-text-fill: white;
+}
+
+.delete-button:hover {
+    -fx-background-color: #c0392b;
+}
+
+.clear-button {
+    -fx-background-color: #95a5a6;
+    -fx-text-fill: white;
+}
+
+.clear-button:hover {
+    -fx-background-color: #7f8c8d;
+}
+
+/* Table styling */
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #bdc3c7;
+    -fx-border-radius: 3px;
+}
+
+.table-view .column-header {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #f9f9f9;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+}
+
+/* Tab styling */
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: #ecf0f1;
+}
+
+.tab {
+    -fx-background-color: #bdc3c7;
+    -fx-padding: 5px 15px;
+}
+
+.tab:selected {
+    -fx-background-color: #3498db;
+}
+
+.tab:selected .tab-label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+/* Chart styling */
+.chart-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.chart-pie-label {
+    -fx-fill: #2c3e50;
+}
+
+.chart-pie {
+    -fx-border-color: white;
+}
+
+/* Progress bar for budget */
+.progress-bar {
+    -fx-accent: #3498db;
+}
+
+.progress-bar > .bar {
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+
+.progress-bar > .track {
+    -fx-background-color: #ecf0f1;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}

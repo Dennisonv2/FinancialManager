@@ -1,4 +1,4 @@
-modules = ["java"]
+modules = ["java", "java-17"]
 
 [nix]
 channel = "stable-24_05"
@@ -31,8 +31,7 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "javac -cp \".:sqlite-jdbc-3.36.0.3.jar\" -d out $(find src -name \"*.java\") && java -cp \"out:sqlite-jdbc-3.36.0.3.jar\" com.financemanager.Main"
-waitForPort = 5000
+args = "mvn compile && mvn exec:java -Dexec.mainClass=\"com.financemanager.ConsoleMain\""
 
 [[workflows.workflow]]
 name = "run_finance_manager"
@@ -46,7 +45,7 @@ task = "packager.installForAll"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd $(pwd) && java -cp .:target/classes:target/dependency/* com.financemanager.Main"
+args = "mvn compile && mvn javafx:run"
 
 [deployment]
-run = ["sh", "-c", "javac -cp \".:sqlite-jdbc-3.36.0.3.jar\" -d out $(find src -name \"*.java\") && java -cp \"out:sqlite-jdbc-3.36.0.3.jar\" com.financemanager.Main"]
+run = ["sh", "-c", "mvn compile && mvn exec:java -Dexec.mainClass=\"com.financemanager.ConsoleMain\""]
