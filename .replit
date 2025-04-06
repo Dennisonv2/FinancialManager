@@ -15,26 +15,8 @@ author = "agent"
 task = "workflow.run"
 args = "Finance Manager App"
 
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "run_finance_manager"
-
 [[workflows.workflow]]
 name = "Finance Manager App"
-author = "agent"
-
-[workflows.workflow.metadata]
-agentRequireRestartOnSave = false
-
-[[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "mvn compile && mvn exec:java -Dexec.mainClass=\"com.financemanager.ConsoleMain\""
-
-[[workflows.workflow]]
-name = "run_finance_manager"
 author = "agent"
 
 [workflows.workflow.metadata]
@@ -48,4 +30,4 @@ task = "shell.exec"
 args = "mvn compile && mvn javafx:run"
 
 [deployment]
-run = ["sh", "-c", "mvn compile && mvn exec:java -Dexec.mainClass=\"com.financemanager.ConsoleMain\""]
+run = ["sh", "-c", "mvn compile && mvn javafx:run"]

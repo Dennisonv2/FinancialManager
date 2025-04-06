@@ -34,11 +34,12 @@ public class View {
         
         // Initialize controller with data access
         controller.setDataAccess(dataAccess);
-        controller.initialize();
+        // Note: We don't need to call controller.initialize() here as JavaFX already called it
         
         // Create scene and apply CSS
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource("/com/financemanager/styles.css").toExternalForm());
+        String cssPath = getClass().getResource("/com/financemanager/styles.css").toExternalForm();
+        scene.getStylesheets().add(cssPath);
         
         // Set the scene on the stage
         primaryStage.setScene(scene);

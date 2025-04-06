@@ -7,17 +7,13 @@ A Java desktop application for personal finance management with budget planning 
 - Add and track income and expenses
 - Categorize transactions
 - Set and monitor budgets
-- View financial summaries
+- View financial summaries with colored transaction indicators
+- Dark Mode UI for better usability
 - Data stored in local SQLite database
 
 ## Running the Application
 
-### Console Version
-```
-mvn compile && mvn exec:java -Dexec.mainClass="com.financemanager.ConsoleMain"
-```
-
-### GUI Version (requires GUI support)
+### GUI Version
 ```
 mvn compile && mvn javafx:run
 ```
@@ -71,7 +67,7 @@ For a complete distribution package, include the following files:
 
 - Language: Java 17
 - Database: SQLite
-- UI Framework: JavaFX (GUI version)
+- UI Framework: JavaFX with dark theme
 - Architecture: MVC (Model-View-Controller)
 - Build System: Maven
 

@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 import javafx.util.StringConverter;
 
 import java.math.BigDecimal;
@@ -71,6 +72,7 @@ public class Controller {
      */
     public void setDataAccess(DataAccess dataAccess) {
         this.dataAccess = dataAccess;
+        loadData(); // Load data once data access is set
     }
     
     /**
@@ -115,16 +117,50 @@ public class Controller {
         amountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         
+        // Apply color formatting to rows based on transaction type
+        typeColumn.setCellFactory(column -> new TableCell<Transaction, String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    setText(item);
+                    if ("Income".equals(item)) {
+                        getStyleClass().add("income-cell");
+                    } else if ("Expense".equals(item)) {
+                        getStyleClass().add("expense-cell");
+                    }
+                }
+            }
+        });
+        
+        // Apply color formatting to amount based on transaction type
+        amountColumn.setCellFactory(column -> new TableCell<Transaction, BigDecimal>() {
+            @Override
+            protected void updateItem(BigDecimal item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    setText(item.toString());
+                    Transaction transaction = getTableView().getItems().get(getIndex());
+                    if ("Income".equals(transaction.getType())) {
+                        getStyleClass().add("income-cell");
+                    } else if ("Expense".equals(transaction.getType())) {
+                        getStyleClass().add("expense-cell");
+                    }
+                }
+            }
+        });
+        
         // Set up budget table columns
         budgetCategoryColumn.setCellValueFactory(new PropertyValueFactory<>("categoryName"));
         budgetAmountColumn.setCellValueFactory(new PropertyValueFactory<>("amount"));
         budgetSpentColumn.setCellValueFactory(new PropertyValueFactory<>("spent"));
         budgetProgressColumn.setCellValueFactory(new PropertyValueFactory<>("progress"));
-        
-        // Load data from database
-        loadCategories();
-        loadTransactions();
-        loadBudgets();
         
         // Add selection listener to table
         transactionTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
@@ -143,13 +179,28 @@ public class Controller {
         updateButton.setDisable(true);
         deleteButton.setDisable(true);
         
-        // Set up charts
-        updateCharts();
-        
         // Track transaction type selection change to filter categories
         transactionTypeComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             updateCategoryComboBox();
         });
+    }
+    
+    /**
+     * Loads all data from the database once the dataAccess is set
+     * This should be called after setDataAccess
+     */
+    public void loadData() {
+        if (dataAccess == null) {
+            return;
+        }
+        
+        // Load data from database
+        loadCategories();
+        loadTransactions();
+        loadBudgets();
+        
+        // Set up charts
+        updateCharts();
         
         // Initial update of category combo box
         updateCategoryComboBox();
@@ -260,10 +311,14 @@ public class Controller {
         
         // Set color based on balance
         if (balance.compareTo(BigDecimal.ZERO) < 0) {
-            balanceLabel.setStyle("-fx-text-fill: red;");
+            balanceLabel.setStyle("-fx-text-fill: #ff6347;"); // Red for negative balance
         } else {
-            balanceLabel.setStyle("-fx-text-fill: green;");
+            balanceLabel.setStyle("-fx-text-fill: #7cfc00;"); // Green for positive balance
         }
+        
+        // Also apply color to income and expense labels
+        totalIncomeLabel.setStyle("-fx-text-fill: #7cfc00;"); // Green for income
+        totalExpenseLabel.setStyle("-fx-text-fill: #ff6347;"); // Red for expenses
     }
     
     /**
@@ -453,7 +508,7 @@ public class Controller {
     }
     
     /**
-     * Event handler for Clear button
+     * Event handler for Clear Form button
      * @param event The action event
      */
     @FXML
@@ -468,7 +523,7 @@ public class Controller {
     @FXML
     private void handleAddBudget(ActionEvent event) {
         if (budgetCategoryComboBox.getValue() == null) {
-            showAlert("Please select a category for the budget");
+            showAlert("Please select a category");
             return;
         }
         
@@ -479,27 +534,28 @@ public class Controller {
                 return;
             }
             
-            Category category = budgetCategoryComboBox.getValue();
+            Budget budget = new Budget();
+            budget.setCategoryId(budgetCategoryComboBox.getValue().getId());
+            budget.setCategoryName(budgetCategoryComboBox.getValue().getName());
+            budget.setAmount(amount);
             
-            // Check if budget already exists for this category
-            for (Budget budget : budgets) {
-                if (budget.getCategoryId() == category.getId()) {
+            // Check if a budget already exists for this category
+            boolean budgetExists = false;
+            for (Budget existingBudget : budgets) {
+                if (existingBudget.getCategoryId() == budget.getCategoryId()) {
+                    budgetExists = true;
+                    
                     // Update existing budget
-                    budget.setAmount(amount);
-                    dataAccess.updateBudget(budget);
-                    loadBudgets();
-                    budgetAmountField.clear();
-                    return;
+                    existingBudget.setAmount(amount);
+                    dataAccess.updateBudget(existingBudget);
+                    break;
                 }
             }
             
-            // Create new budget
-            Budget budget = new Budget();
-            budget.setCategoryId(category.getId());
-            budget.setCategoryName(category.getName());
-            budget.setAmount(amount);
+            if (!budgetExists) {
+                dataAccess.addBudget(budget);
+            }
             
-            dataAccess.addBudget(budget);
             loadBudgets();
             budgetAmountField.clear();
             
