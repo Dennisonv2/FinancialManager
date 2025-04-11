@@ -28,7 +28,7 @@ public class Main extends Application {
             view.initialize(primaryStage);
             
             // Set application title
-            primaryStage.setTitle("Personal Finance Manager");
+            primaryStage.setTitle("Персональный Финансовый Менеджер");
             
             // Set minimum window size
             primaryStage.setMinWidth(800);

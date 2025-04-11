@@ -78,9 +78,10 @@ public class Controller {
     /**
      * Initializes the controller and UI elements
      */
+    @FXML
     public void initialize() {
-        // Initialize transaction types combo box
-        transactionTypeComboBox.setItems(FXCollections.observableArrayList("Income", "Expense"));
+        // Initialize transaction types combo box with Russian labels
+        transactionTypeComboBox.setItems(FXCollections.observableArrayList("Доход", "Расход"));
         transactionTypeComboBox.getSelectionModel().selectFirst();
         
         // Initialize date picker with current date
@@ -88,7 +89,7 @@ public class Controller {
         
         // Configure date format for date picker
         datePicker.setConverter(new StringConverter<LocalDate>() {
-            private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
             
             @Override
             public String toString(LocalDate date) {
@@ -127,9 +128,9 @@ public class Controller {
                     setStyle("");
                 } else {
                     setText(item);
-                    if ("Income".equals(item)) {
+                    if ("Доход".equals(item)) {
                         getStyleClass().add("income-cell");
-                    } else if ("Expense".equals(item)) {
+                    } else if ("Расход".equals(item)) {
                         getStyleClass().add("expense-cell");
                     }
                 }
@@ -145,12 +146,15 @@ public class Controller {
                     setText(null);
                     setStyle("");
                 } else {
-                    setText(item.toString());
-                    Transaction transaction = getTableView().getItems().get(getIndex());
-                    if ("Income".equals(transaction.getType())) {
-                        getStyleClass().add("income-cell");
-                    } else if ("Expense".equals(transaction.getType())) {
-                        getStyleClass().add("expense-cell");
+                    setText(item.toString() + " ₽");
+                    // Проверка на наличие транзакции
+                    if (getTableView().getItems() != null && getIndex() >= 0 && getIndex() < getTableView().getItems().size()) {
+                        Transaction transaction = getTableView().getItems().get(getIndex());
+                        if (transaction != null && "Доход".equals(transaction.getType())) {
+                            getStyleClass().add("income-cell");
+                        } else if (transaction != null && "Расход".equals(transaction.getType())) {
+                            getStyleClass().add("expense-cell");
+                        }
                     }
                 }
             }
@@ -181,8 +185,19 @@ public class Controller {
         
         // Track transaction type selection change to filter categories
         transactionTypeComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            updateCategoryComboBox();
+            if (dataAccess != null) {
+                updateCategoryComboBox();
+            }
         });
+        
+        // Setup initial labels
+        totalIncomeLabel.setText("Общий доход: 0.00 ₽");
+        totalExpenseLabel.setText("Общие расходы: 0.00 ₽");
+        balanceLabel.setText("Баланс: 0.00 ₽");
+        
+        // Apply CSS styles to labels
+        totalIncomeLabel.getStyleClass().add("income-cell");
+        totalExpenseLabel.getStyleClass().add("expense-cell");
     }
     
     /**
@@ -210,16 +225,23 @@ public class Controller {
      * Updates the category combo box based on the selected transaction type
      */
     private void updateCategoryComboBox() {
+        if (categories == null || categories.isEmpty() || transactionTypeComboBox.getValue() == null) {
+            return;
+        }
+        
         String selectedType = transactionTypeComboBox.getValue();
+        // Translate UI labels to database values
+        String typeForFilter = "Доход".equals(selectedType) ? "Income" : "Expense";
+        
         ObservableList<Category> filteredCategories = categories.filtered(
-            category -> category.getType().equals(selectedType)
+            category -> category.getType().equals(typeForFilter)
         );
         categoryComboBox.setItems(filteredCategories);
         if (!filteredCategories.isEmpty()) {
             categoryComboBox.getSelectionModel().selectFirst();
         }
         
-        // Also update budget category combo box
+        // Also update budget category combo box - only show expense categories
         budgetCategoryComboBox.setItems(categories.filtered(
             category -> category.getType().equals("Expense")
         ));
@@ -234,6 +256,16 @@ public class Controller {
     private void loadTransactions() {
         List<Transaction> transactionList = dataAccess.getAllTransactions();
         transactions.clear();
+        
+        // Translate transaction types from English to Russian
+        for (Transaction transaction : transactionList) {
+            if ("Income".equals(transaction.getType())) {
+                transaction.setType("Доход");
+            } else if ("Expense".equals(transaction.getType())) {
+                transaction.setType("Расход");
+            }
+        }
+        
         transactions.addAll(transactionList);
         transactionTable.setItems(transactions);
         updateSummary();
@@ -244,26 +276,37 @@ public class Controller {
      * Loads category data from the database
      */
     private void loadCategories() {
+        if (dataAccess == null) {
+            System.err.println("Data access is null in loadCategories()");
+            return;
+        }
+        
         List<Category> categoryList = dataAccess.getAllCategories();
         categories.clear();
         
-        // If no categories exist, create default ones
+        // If no categories exist, create default ones (in Russian)
         if (categoryList.isEmpty()) {
             // Create default income categories
-            dataAccess.addCategory(new Category("Salary", "Income"));
-            dataAccess.addCategory(new Category("Bonus", "Income"));
-            dataAccess.addCategory(new Category("Investment", "Income"));
-            dataAccess.addCategory(new Category("Gift", "Income"));
+            dataAccess.addCategory(new Category("Зарплата", "Income"));
+            dataAccess.addCategory(new Category("Премия", "Income"));
+            dataAccess.addCategory(new Category("Инвестиции", "Income"));
+            dataAccess.addCategory(new Category("Подарок", "Income"));
+            dataAccess.addCategory(new Category("Прочие доходы", "Income"));
             
             // Create default expense categories
-            dataAccess.addCategory(new Category("Food", "Expense"));
-            dataAccess.addCategory(new Category("Housing", "Expense"));
-            dataAccess.addCategory(new Category("Transportation", "Expense"));
-            dataAccess.addCategory(new Category("Entertainment", "Expense"));
-            dataAccess.addCategory(new Category("Utilities", "Expense"));
-            dataAccess.addCategory(new Category("Healthcare", "Expense"));
-            dataAccess.addCategory(new Category("Education", "Expense"));
-            dataAccess.addCategory(new Category("Other", "Expense"));
+            dataAccess.addCategory(new Category("Продукты", "Expense"));
+            dataAccess.addCategory(new Category("Жилье", "Expense"));
+            dataAccess.addCategory(new Category("Транспорт", "Expense"));
+            dataAccess.addCategory(new Category("Развлечения", "Expense"));
+            dataAccess.addCategory(new Category("Коммунальные услуги", "Expense"));
+            dataAccess.addCategory(new Category("Здоровье", "Expense"));
+            dataAccess.addCategory(new Category("Образование", "Expense"));
+            dataAccess.addCategory(new Category("Рестораны", "Expense"));
+            dataAccess.addCategory(new Category("Одежда", "Expense"));
+            dataAccess.addCategory(new Category("Техника", "Expense"));
+            dataAccess.addCategory(new Category("Путешествия", "Expense"));
+            dataAccess.addCategory(new Category("Подарки", "Expense"));
+            dataAccess.addCategory(new Category("Прочие расходы", "Expense"));
             
             // Reload categories
             categoryList = dataAccess.getAllCategories();
@@ -296,18 +339,18 @@ public class Controller {
         BigDecimal totalExpense = BigDecimal.ZERO;
         
         for (Transaction transaction : transactions) {
-            if ("Income".equals(transaction.getType())) {
+            if ("Доход".equals(transaction.getType())) {
                 totalIncome = totalIncome.add(transaction.getAmount());
-            } else if ("Expense".equals(transaction.getType())) {
+            } else if ("Расход".equals(transaction.getType())) {
                 totalExpense = totalExpense.add(transaction.getAmount());
             }
         }
         
         BigDecimal balance = totalIncome.subtract(totalExpense);
         
-        totalIncomeLabel.setText("Total Income: $" + totalIncome);
-        totalExpenseLabel.setText("Total Expenses: $" + totalExpense);
-        balanceLabel.setText("Balance: $" + balance);
+        totalIncomeLabel.setText("Общий доход: " + totalIncome + " ₽");
+        totalExpenseLabel.setText("Общие расходы: " + totalExpense + " ₽");
+        balanceLabel.setText("Баланс: " + balance + " ₽");
         
         // Set color based on balance
         if (balance.compareTo(BigDecimal.ZERO) < 0) {
@@ -348,6 +391,10 @@ public class Controller {
                 }
             }
         }
+        
+        // Update chart titles
+        expenseChart.setTitle("Структура расходов");
+        incomeChart.setTitle("Структура доходов");
         
         expenseChart.setData(expenseData);
         incomeChart.setData(incomeData);
@@ -394,28 +441,28 @@ public class Controller {
      */
     private boolean validateForm() {
         if (datePicker.getValue() == null) {
-            showAlert("Date is required");
+            showAlert("Дата обязательна");
             return false;
         }
         
         if (transactionTypeComboBox.getValue() == null) {
-            showAlert("Transaction type is required");
+            showAlert("Тип транзакции обязателен");
             return false;
         }
         
         if (categoryComboBox.getValue() == null) {
-            showAlert("Category is required");
+            showAlert("Категория обязательна");
             return false;
         }
         
         try {
             BigDecimal amount = new BigDecimal(amountField.getText());
             if (amount.compareTo(BigDecimal.ZERO) <= 0) {
-                showAlert("Amount must be greater than zero");
+                showAlert("Сумма должна быть больше нуля");
                 return false;
             }
         } catch (NumberFormatException e) {
-            showAlert("Please enter a valid amount");
+            showAlert("Пожалуйста, введите корректную сумму");
             return false;
         }
         
@@ -428,7 +475,7 @@ public class Controller {
      */
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Input Error");
+        alert.setTitle("Ошибка ввода");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
@@ -446,7 +493,12 @@ public class Controller {
         
         Transaction transaction = new Transaction();
         transaction.setDate(datePicker.getValue());
-        transaction.setType(transactionTypeComboBox.getValue());
+        
+        // Convert between Russian UI labels and English database values
+        String selectedType = transactionTypeComboBox.getValue();
+        String dbType = "Доход".equals(selectedType) ? "Income" : "Expense";
+        transaction.setType(dbType);
+        
         transaction.setCategoryId(categoryComboBox.getValue().getId());
         transaction.setCategoryName(categoryComboBox.getValue().getName());
         transaction.setAmount(new BigDecimal(amountField.getText()));
@@ -472,7 +524,12 @@ public class Controller {
         }
         
         selectedTransaction.setDate(datePicker.getValue());
-        selectedTransaction.setType(transactionTypeComboBox.getValue());
+        
+        // Convert between Russian UI labels and English database values
+        String selectedType = transactionTypeComboBox.getValue();
+        String dbType = "Доход".equals(selectedType) ? "Income" : "Expense";
+        selectedTransaction.setType(dbType);
+        
         selectedTransaction.setCategoryId(categoryComboBox.getValue().getId());
         selectedTransaction.setCategoryName(categoryComboBox.getValue().getName());
         selectedTransaction.setAmount(new BigDecimal(amountField.getText()));
@@ -494,9 +551,9 @@ public class Controller {
         }
         
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirm Delete");
+        alert.setTitle("Подтверждение удаления");
         alert.setHeaderText(null);
-        alert.setContentText("Are you sure you want to delete this transaction?");
+        alert.setContentText("Вы уверены, что хотите удалить эту транзакцию?");
         
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
@@ -523,14 +580,14 @@ public class Controller {
     @FXML
     private void handleAddBudget(ActionEvent event) {
         if (budgetCategoryComboBox.getValue() == null) {
-            showAlert("Please select a category");
+            showAlert("Пожалуйста, выберите категорию");
             return;
         }
         
         try {
             BigDecimal amount = new BigDecimal(budgetAmountField.getText());
             if (amount.compareTo(BigDecimal.ZERO) <= 0) {
-                showAlert("Budget amount must be greater than zero");
+                showAlert("Сумма бюджета должна быть больше нуля");
                 return;
             }
             
@@ -560,7 +617,7 @@ public class Controller {
             budgetAmountField.clear();
             
         } catch (NumberFormatException e) {
-            showAlert("Please enter a valid budget amount");
+            showAlert("Пожалуйста, введите корректную сумму");
         }
     }
 }

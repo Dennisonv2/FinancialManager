@@ -10,6 +10,43 @@ import java.util.List;
  * Data access class for database operations
  */
 public class DataAccess {
+    /**
+     * Main method for testing database connection
+     * This is used by the test_finance_manager.sh script
+     * 
+     * @param args Command line arguments
+     */
+    public static void main(String[] args) {
+        // Check if called with "test" argument
+        if (args.length > 0 && args[0].equals("test")) {
+            DataAccess dataAccess = new DataAccess();
+            try {
+                // Test database connection
+                dataAccess.connect();
+                System.out.println("Database connection established successfully");
+                
+                // Test table creation
+                dataAccess.createTablesIfNotExist();
+                System.out.println("Database tables created/verified successfully");
+                
+                // Test retrieving categories
+                List<Category> categories = dataAccess.getAllCategories();
+                System.out.println("Successfully retrieved " + categories.size() + " categories");
+                
+                // Close connection
+                dataAccess.disconnect();
+                System.out.println("Database connection closed");
+                
+                // Exit with success code
+                System.exit(0);
+            } catch (Exception e) {
+                System.err.println("Database test failed: " + e.getMessage());
+                e.printStackTrace();
+                System.exit(1);
+            }
+        }
+    }
+    
     private Connection connection;
     private static final String DB_URL = "jdbc:sqlite:finance_manager.db";
     

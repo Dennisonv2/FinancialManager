@@ -1,78 +1,153 @@
-# Finance Manager Application
+# Персональный Финансовый Менеджер (Personal Finance Manager)
 
-A Java desktop application for personal finance management with budget planning and expense tracking.
+Десктопное Java-приложение для управления личными финансами с возможностями планирования бюджета и отслеживания расходов. Интерфейс приложения на русском языке, валюта - рубли (₽).
 
-## Features
+## Особенности
 
-- Add and track income and expenses
-- Categorize transactions
-- Set and monitor budgets
-- View financial summaries with colored transaction indicators
-- Dark Mode UI for better usability
-- Data stored in local SQLite database
+- Добавление и отслеживание доходов и расходов
+- Категоризация транзакций
+- Установка и мониторинг бюджетов
+- Просмотр финансовых сводок с цветовой индикацией (зеленый для доходов, красный для расходов)
+- Тёмный режим интерфейса для лучшего восприятия
+- Данные хранятся в локальной базе данных SQLite
 
-## Running the Application
+## Запуск приложения
 
-### GUI Version
+### Использование скриптов запуска
+
+Для удобного запуска приложения используйте включенные скрипты:
+
+- **Linux/macOS**: `./run_finance_manager.sh`
+- **Windows**: `run_finance_manager.bat`
+
+Эти скрипты автоматически проверят наличие Java, выберут оптимальный способ запуска (Maven или JAR) и запустят приложение с необходимыми параметрами.
+
+### Запуск вручную через Maven
 ```
 mvn compile && mvn javafx:run
 ```
 
-## Creating Executable Files
+### Запуск через JAR-файл
+```
+java --module-path lib --add-modules javafx.controls,javafx.fxml -jar target/FinanceManager-1.0-SNAPSHOT.jar
+```
 
-### Executable JAR
+### Запуск в IntelliJ IDEA
+Приложение поддерживает запуск через класс `MainApp.java`, который решает проблемы с модулями JavaFX.
 
-An executable JAR file has already been created in the `target/` directory:
+## Создание исполняемых файлов
+
+### Исполняемый JAR-файл
+
+Исполняемый JAR-файл уже создан в директории `target/`:
 ```
 FinanceManager-1.0-SNAPSHOT.jar
 ```
 
-You can run this JAR on any system with Java installed:
+Вы можете запустить этот JAR на любой системе с установленной Java:
 ```
 java -jar FinanceManager-1.0-SNAPSHOT.jar
 ```
 
-### Creating an EXE File (Windows)
+### Создание EXE-файла (Windows)
 
-To create an EXE file from the JAR, follow these steps:
+Для создания EXE-файла из JAR, выполните следующие шаги:
 
-1. **Using Launch4j (Recommended)**
+1. **Использование Launch4j (Рекомендуется)**
 
-   a. Download Launch4j from https://launch4j.sourceforge.net/
+   a. Загрузите Launch4j с https://launch4j.sourceforge.net/
    
-   b. Create a new configuration with the following settings:
+   b. Создайте новую конфигурацию со следующими настройками:
       - Output file: `FinanceManager.exe`
-      - Jar: Path to `FinanceManager-1.0-SNAPSHOT.jar`
-      - JRE: Min version: 17.0.0
+      - Jar: Путь к `FinanceManager-1.0-SNAPSHOT.jar`
+      - JRE: Минимальная версия: 17.0.0
    
-   c. Set the application details in the "Version Info" tab
+   c. Установите информацию о приложении на вкладке "Version Info"
    
-   d. Click "Build wrapper"
+   d. Нажмите "Build wrapper"
 
-2. **Alternative: Use an online converter**
+2. **Альтернатива: Использование онлайн-конвертера**
 
-   Several online services can convert JAR to EXE, such as:
+   Некоторые онлайн-сервисы могут конвертировать JAR в EXE, например:
    - jar2exe (https://www.jar2exe.com/)
    - Exe4j (https://www.ej-technologies.com/products/exe4j/overview.html)
 
-### Creating a Distribution Package
+### Создание дистрибутива
 
-For a complete distribution package, include the following files:
-- The executable (.jar or .exe)
-- A copy of the SQLite database (if you want to include sample data)
-- README with instructions
-- JRE folder (optional, for bundling Java with your application)
+Для полного дистрибутива включите следующие файлы:
+- Исполняемый файл (.jar или .exe)
+- Копию базы данных SQLite (если хотите включить образец данных)
+- README с инструкциями
+- Папку JRE (опционально, для включения Java в ваше приложение)
 
-## Technical Details
+## Технические детали
 
-- Language: Java 17
-- Database: SQLite
-- UI Framework: JavaFX with dark theme
-- Architecture: MVC (Model-View-Controller)
-- Build System: Maven
+- Язык: Java 17
+- База данных: SQLite
+- UI-фреймворк: JavaFX с тёмной темой
+- Архитектура: MVC (Model-View-Controller)
+- Система сборки: Maven
 
-## Database Structure
+## Структура базы данных
 
 - Categories (id, name, type)
 - Transactions (id, date, type, category_id, amount, description)
 - Budgets (id, category_id, amount)
+
+## Категории по умолчанию
+
+### Категории доходов
+- Зарплата
+- Премия
+- Инвестиции
+- Подарок
+- Прочие доходы
+
+### Категории расходов
+- Продукты
+- Жилье
+- Транспорт
+- Развлечения
+- Коммунальные услуги
+- Здоровье
+- Образование
+- Рестораны
+- Одежда
+- Техника
+- Путешествия
+- Подарки
+- Прочие расходы
+
+## Известные проблемы
+
+При запуске приложения в некоторых средах может возникнуть ошибка "JavaFX runtime components are missing". В этом случае используйте:
+
+1. Запуск через Maven: `mvn javafx:run`
+2. Запуск через класс `MainApp` в IntelliJ IDEA
+3. Добавление параметров VM для модулей JavaFX:
+   ```
+   --module-path /path/to/javafx-sdk/lib --add-modules javafx.controls,javafx.fxml
+   ```
+
+## Тестирование в среде без графического интерфейса (Replit)
+
+В средах без поддержки графического интерфейса (например, Replit) вы можете протестировать функциональность базы данных и бизнес-логики без запуска JavaFX GUI, используя следующие скрипты:
+
+### Тестирование подключения к базе данных
+```
+./test_db_connection.sh
+```
+Этот скрипт проверяет соединение с базой данных SQLite и создает тестовую таблицу.
+
+### Тестирование основной функциональности
+```
+./test_app.sh
+```
+Этот скрипт запускает `TestApp.java`, который выполняет следующие действия:
+- Проверяет соединение с базой данных
+- Проверяет создание таблиц
+- Тестирует работу с категориями доходов и расходов
+- Тестирует создание и отображение транзакций
+- Тестирует управление бюджетами
+
+Результаты выводятся в консоль, что позволяет убедиться в работоспособности основных компонентов приложения без запуска графического интерфейса.

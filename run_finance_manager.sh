@@ -1,26 +1,27 @@
 #!/bin/bash
 
-echo "Starting Finance Manager..."
+echo "Запуск Менеджера Финансов..."
 
 # Check if Java is installed
 if ! command -v java &> /dev/null; then
-    echo "Java is not installed or not in PATH. Please install Java 17 or higher."
+    echo "Java не установлен или отсутствует в PATH. Пожалуйста, установите Java 17 или выше."
     exit 1
 fi
 
-# Run the application
-echo "Choose a mode:"
-echo "1. GUI Mode"
-echo "2. Console Mode"
-read -p "Enter your choice (1/2): " mode
+# Run the application with JavaFX
+echo "Запуск приложения..."
 
-if [ "$mode" = "1" ]; then
-    echo "Starting GUI mode..."
+# Try to run with Maven if available
+if command -v mvn &> /dev/null; then
+    echo "Запуск через Maven..."
     mvn compile && mvn javafx:run
-elif [ "$mode" = "2" ]; then
-    echo "Starting Console mode..."
-    mvn compile && mvn exec:java -Dexec.mainClass="com.financemanager.ConsoleMain"
 else
-    echo "Invalid choice. Please enter 1 or 2."
-    exit 1
+    # Check if the JAR file exists
+    if [ -f "target/FinanceManager-1.0-SNAPSHOT.jar" ]; then
+        echo "Запуск через JAR файл..."
+        java --module-path lib --add-modules javafx.controls,javafx.fxml -jar target/FinanceManager-1.0-SNAPSHOT.jar
+    else
+        echo "JAR файл не найден. Пожалуйста, соберите проект с помощью Maven: mvn clean package"
+        exit 1
+    fi
 fi

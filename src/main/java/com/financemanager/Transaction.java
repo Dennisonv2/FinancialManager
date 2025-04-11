@@ -106,6 +106,6 @@ public class Transaction {
     
     @Override
     public String toString() {
-        return date + " - " + type + " - " + categoryName + " - $" + amount + " - " + description;
+        return date + " - " + type + " - " + categoryName + " - " + amount + " ₽ - " + description;
     }
 }
