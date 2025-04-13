@@ -480,7 +480,8 @@ public class DataAccess {
                         .doubleValue();
                 }
                 
-                Budget budget = new Budget(id, categoryId, categoryName, amount, spent, progress);
+                Budget budget = new Budget(id, categoryId, categoryName, amount);
+                budget.setSpent(spent);
                 budgets.add(budget);
             }
             
