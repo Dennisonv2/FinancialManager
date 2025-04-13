@@ -59,8 +59,9 @@ public class TestApp {
             
             // Стандартные категории доходов
             dataAccess.addCategory(new Category(0, "Зарплата", "Income"));
-            dataAccess.addCategory(new Category(0, "Дивиденды", "Income"));
-            dataAccess.addCategory(new Category(0, "Подарки", "Income"));
+            dataAccess.addCategory(new Category(0, "Премия", "Income"));
+            dataAccess.addCategory(new Category(0, "Инвестиции", "Income"));
+            dataAccess.addCategory(new Category(0, "Подарок", "Income"));
             dataAccess.addCategory(new Category(0, "Прочие доходы", "Income"));
             
             // Стандартные категории расходов
@@ -68,8 +69,14 @@ public class TestApp {
             dataAccess.addCategory(new Category(0, "Жилье", "Expense"));
             dataAccess.addCategory(new Category(0, "Транспорт", "Expense"));
             dataAccess.addCategory(new Category(0, "Развлечения", "Expense"));
+            dataAccess.addCategory(new Category(0, "Коммунальные услуги", "Expense"));
             dataAccess.addCategory(new Category(0, "Здоровье", "Expense"));
+            dataAccess.addCategory(new Category(0, "Образование", "Expense"));
+            dataAccess.addCategory(new Category(0, "Рестораны", "Expense"));
             dataAccess.addCategory(new Category(0, "Одежда", "Expense"));
+            dataAccess.addCategory(new Category(0, "Техника", "Expense"));
+            dataAccess.addCategory(new Category(0, "Путешествия", "Expense"));
+            dataAccess.addCategory(new Category(0, "Подарки", "Expense"));
             dataAccess.addCategory(new Category(0, "Прочие расходы", "Expense"));
             
             // Получение обновленного списка категорий
@@ -77,9 +84,10 @@ public class TestApp {
             System.out.println("Создано категорий: " + categories.size());
         }
         
-        // Вывод всех категорий
+        // Вывод всех категорий с русскими названиями типов
         for (Category category : categories) {
-            System.out.println(category.getType() + ": " + category.getName() + " (ID: " + category.getId() + ")");
+            String typeDisplay = "Income".equals(category.getType()) ? "Доход" : "Расход";
+            System.out.println(typeDisplay + ": " + category.getName() + " (ID: " + category.getId() + ")");
         }
     }
     
@@ -143,11 +151,12 @@ public class TestApp {
             }
         }
         
-        // Вывод всех транзакций
+        // Вывод всех транзакций с русскими обозначениями типов
         for (Transaction transaction : transactions) {
+            String typeDisplay = "Income".equals(transaction.getType()) ? "Доход" : "Расход";
             System.out.println(
                 transaction.getDate() + " | " + 
-                transaction.getType() + " | " + 
+                typeDisplay + " | " + 
                 transaction.getCategoryName() + " | " + 
                 transaction.getAmount() + " ₽ | " + 
                 transaction.getDescription()

@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -19,103 +16,74 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="800.0" prefHeight="700.0" prefWidth="1000.0" styleClass="background" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.financemanager.Controller">
-   <top>
-      <VBox alignment="CENTER" BorderPane.alignment="CENTER">
-         <BorderPane.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </BorderPane.margin>
-         <children>
-            <Label styleClass="title-label" text="Персональный Финансовый Менеджер">
-               <font>
-                  <Font name="System Bold" size="24.0" />
-               </font>
-            </Label>
-            <HBox alignment="CENTER" spacing="20.0">
-               <children>
-                  <Label fx:id="totalIncomeLabel" styleClass="total-income" text="Общий доход: 0.00 ₽">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="totalExpenseLabel" styleClass="total-expense" text="Общие расходы: 0.00 ₽">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="balanceLabel" styleClass="balance" text="Баланс: 0.00 ₽">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Label>
-               </children>
-               <padding>
-                  <Insets bottom="5.0" top="5.0" />
-               </padding>
-            </HBox>
-            <Separator />
-         </children>
-      </VBox>
-   </top>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="600.0" minWidth="800.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.financemanager.Controller">
    <center>
       <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
-         <tabs>
+        <tabs>
             <Tab text="Транзакции">
                <content>
                   <BorderPane prefHeight="200.0" prefWidth="200.0">
-                     <top>
-                        <GridPane hgap="10.0" vgap="10.0" BorderPane.alignment="CENTER">
-                           <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                           </columnConstraints>
-                           <rowConstraints>
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                           </rowConstraints>
+                     <left>
+                        <VBox spacing="10.0" BorderPane.alignment="CENTER">
+                           <BorderPane.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </BorderPane.margin>
                            <children>
-                              <Label text="Дата:" />
-                              <DatePicker fx:id="datePicker" prefWidth="200.0" GridPane.columnIndex="1" />
-                              <Label text="Тип:" GridPane.columnIndex="2" />
-                              <ComboBox fx:id="transactionTypeComboBox" prefWidth="200.0" GridPane.columnIndex="3" />
-                              <Label text="Категория:" GridPane.rowIndex="1" />
-                              <ComboBox fx:id="categoryComboBox" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Label text="Сумма:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                              <TextField fx:id="amountField" prefWidth="200.0" promptText="Введите сумму" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                              <Label text="Описание:" GridPane.rowIndex="2" />
-                              <TextField fx:id="descriptionField" prefWidth="400.0" promptText="Введите описание" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
-                              <HBox alignment="CENTER" spacing="10.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                              <GridPane hgap="10.0" vgap="10.0">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="200.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <Label text="Дата:" />
+                                    <Label text="Тип:" GridPane.rowIndex="1" />
+                                    <Label text="Категория:" GridPane.rowIndex="2" />
+                                    <Label text="Сумма:" GridPane.rowIndex="3" />
+                                    <Label text="Описание:" GridPane.rowIndex="4" />
+                                    <DatePicker fx:id="datePicker" GridPane.columnIndex="1" />
+                                    <ComboBox fx:id="transactionTypeComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <ComboBox fx:id="categoryComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    <TextField fx:id="amountField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                    <TextField fx:id="descriptionField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                 </children>
+                              </GridPane>
+                              <HBox alignment="CENTER" spacing="10.0">
                                  <children>
                                     <Button fx:id="addButton" mnemonicParsing="false" onAction="#handleAddTransaction" styleClass="add-button" text="Добавить" />
                                     <Button fx:id="updateButton" mnemonicParsing="false" onAction="#handleUpdateTransaction" styleClass="update-button" text="Обновить" />
                                     <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#handleDeleteTransaction" styleClass="delete-button" text="Удалить" />
-                                    <Button fx:id="clearButton" mnemonicParsing="false" onAction="#handleClearForm" styleClass="clear-button" text="Очистить" />
+                                    <Button fx:id="clearButton" mnemonicParsing="false" onAction="#handleClearForm" text="Очистить" />
                                  </children>
                               </HBox>
+                              <VBox spacing="5.0">
+                                 <children>
+                                    <Label fx:id="totalIncomeLabel" text="Общий доход: 0.00 ₽" />
+                                    <Label fx:id="totalExpenseLabel" text="Общие расходы: 0.00 ₽" />
+                                    <Label fx:id="balanceLabel" text="Баланс: 0.00 ₽" />
+                                 </children>
+                              </VBox>
                            </children>
-                           <BorderPane.margin>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </BorderPane.margin>
-                        </GridPane>
-                     </top>
+                        </VBox>
+                     </left>
                      <center>
                         <TableView fx:id="transactionTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                            <columns>
-                              <TableColumn fx:id="idColumn" prefWidth="50.0" text="ID" />
+                              <TableColumn fx:id="idColumn" prefWidth="50.0" text="ID" visible="false" />
                               <TableColumn fx:id="dateColumn" prefWidth="100.0" text="Дата" />
                               <TableColumn fx:id="typeColumn" prefWidth="100.0" text="Тип" />
                               <TableColumn fx:id="categoryColumn" prefWidth="120.0" text="Категория" />
                               <TableColumn fx:id="amountColumn" prefWidth="100.0" text="Сумма" />
-                              <TableColumn fx:id="descriptionColumn" prefWidth="300.0" text="Описание" />
+                              <TableColumn fx:id="descriptionColumn" prefWidth="200.0" text="Описание" />
                            </columns>
-                           <BorderPane.margin>
-                              <Insets bottom="10.0" left="10.0" right="10.0" />
-                           </BorderPane.margin>
                         </TableView>
                      </center>
                   </BorderPane>
@@ -135,6 +103,7 @@
                            </columnConstraints>
                            <rowConstraints>
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <BorderPane.margin>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -144,7 +113,8 @@
                               <ComboBox fx:id="budgetCategoryComboBox" prefWidth="150.0" GridPane.columnIndex="1" />
                               <Label text="Сумма:" GridPane.columnIndex="2" />
                               <TextField fx:id="budgetAmountField" prefWidth="150.0" promptText="Введите сумму бюджета" GridPane.columnIndex="3" />
-                              <Button fx:id="addBudgetButton" mnemonicParsing="false" onAction="#handleAddBudget" styleClass="add-button" text="Установить бюджет" GridPane.columnIndex="4" />
+                              <Button fx:id="addBudgetButton" mnemonicParsing="false" onAction="#handleAddBudget" styleClass="add-button" text="Добавить бюджет" GridPane.columnIndex="4" />
+                              <Button fx:id="updateBudgetButton" mnemonicParsing="false" onAction="#handleUpdateBudget" styleClass="update-button" text="Обновить бюджет" GridPane.columnIndex="4" GridPane.rowIndex="1" />
                            </children>
                         </GridPane>
                      </top>
@@ -164,48 +134,67 @@
                   </BorderPane>
                </content>
             </Tab>
-            <Tab text="Статистика">
+            <Tab text="Категории">
                <content>
                   <BorderPane prefHeight="200.0" prefWidth="200.0">
-                     <center>
-                        <HBox spacing="10.0" BorderPane.alignment="CENTER">
-                           <children>
-                              <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
-                                 <children>
-                                    <Label styleClass="chart-title" text="Структура расходов">
-                                       <font>
-                                          <Font name="System Bold" size="14.0" />
-                                       </font>
-                                       <VBox.margin>
-                                          <Insets bottom="5.0" left="5.0" top="5.0" />
-                                       </VBox.margin>
-                                    </Label>
-                                    <PieChart fx:id="expenseChart" VBox.vgrow="ALWAYS" />
-                                 </children>
-                              </VBox>
-                              <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
-                                 <children>
-                                    <Label styleClass="chart-title" text="Источники доходов">
-                                       <font>
-                                          <Font name="System Bold" size="14.0" />
-                                       </font>
-                                       <VBox.margin>
-                                          <Insets bottom="5.0" left="5.0" top="5.0" />
-                                       </VBox.margin>
-                                    </Label>
-                                    <PieChart fx:id="incomeChart" VBox.vgrow="ALWAYS" />
-                                 </children>
-                              </VBox>
-                           </children>
+                     <top>
+                        <GridPane hgap="10.0" vgap="10.0" BorderPane.alignment="CENTER">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="80.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="150.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
                            <BorderPane.margin>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </BorderPane.margin>
-                        </HBox>
+                           <children>
+                              <Label text="Название:" />
+                              <TextField fx:id="newCategoryNameField" prefWidth="150.0" promptText="Введите название категории" GridPane.columnIndex="1" />
+                              <Label text="Тип:" GridPane.columnIndex="2" />
+                              <ComboBox fx:id="newCategoryTypeComboBox" prefWidth="150.0" GridPane.columnIndex="3" />
+                              <Button fx:id="addCategoryButton" mnemonicParsing="false" onAction="#handleAddCategory" styleClass="add-button" text="Добавить категорию" GridPane.columnIndex="4" />
+                              <Button fx:id="updateCategoryButton" mnemonicParsing="false" onAction="#handleUpdateCategory" styleClass="update-button" text="Изменить категорию" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                              <Button fx:id="deleteCategoryButton" mnemonicParsing="false" onAction="#handleDeleteCategory" styleClass="delete-button" text="Удалить категорию" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                           </children>
+                        </GridPane>
+                     </top>
+                     <center>
+                        <TableView fx:id="categoryTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                           <columns>
+                              <TableColumn fx:id="categoryNameColumn" prefWidth="300.0" text="Название" />
+                              <TableColumn fx:id="categoryTypeColumn" prefWidth="200.0" text="Тип" />
+                           </columns>
+                           <BorderPane.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" />
+                           </BorderPane.margin>
+                        </TableView>
                      </center>
                   </BorderPane>
                </content>
             </Tab>
-         </tabs>
+            <Tab text="Статистика">
+               <content>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                     <left>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label text="Расходы по категориям" />
+                              <PieChart fx:id="expenseChart" prefHeight="250.0" prefWidth="300.0" title="Расходы" />
+                              <Label text="Доходы по категориям" />
+                              <PieChart fx:id="incomeChart" prefHeight="250.0" prefWidth="300.0" title="Доходы" />
+                           </children>
+                        </VBox>
+                     </left>
+                  </BorderPane>
+               </content>
+            </Tab>
+        </tabs>
       </TabPane>
    </center>
 </BorderPane>
