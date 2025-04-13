@@ -158,7 +158,8 @@
                 </executions>
             </plugin>
             
-            <!-- Launch4j Plugin for creating Windows EXE -->
+            <!-- Launch4j Maven Plugin for Windows EXE creation -->
+            <!-- 
             <plugin>
                 <groupId>com.akathist.maven.plugins.launch4j</groupId>
                 <artifactId>launch4j-maven-plugin</artifactId>
@@ -200,6 +201,7 @@
                     </execution>
                 </executions>
             </plugin>
+            
         </plugins>
     </build>
 </project>

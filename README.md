@@ -51,9 +51,25 @@ java -jar FinanceManager-1.0-SNAPSHOT.jar
 
 ### Создание EXE-файла (Windows)
 
-Для создания EXE-файла из JAR, выполните следующие шаги:
+Проект включает скрипт для автоматического создания EXE-файла на Windows:
 
-1. **Использование Launch4j (Рекомендуется)**
+```
+create_exe.bat
+```
+
+Этот скрипт проведет вас через процесс создания EXE-файла, предлагая несколько вариантов:
+1. Использование jpackage (рекомендуется, требуется JDK 14+)
+2. Использование Launch4j GUI
+3. Использование JAR без создания EXE
+
+Подробная документация по созданию EXE доступна в файле:
+```
+docs/CREATE_EXE_GUIDE.md
+```
+
+#### Ручное создание EXE с Launch4j
+
+1. **Использование Launch4j**
 
    a. Загрузите Launch4j с https://launch4j.sourceforge.net/
    
@@ -66,11 +82,13 @@ java -jar FinanceManager-1.0-SNAPSHOT.jar
    
    d. Нажмите "Build wrapper"
 
-2. **Альтернатива: Использование онлайн-конвертера**
+2. **Использование jpackage (JDK 14+)**
 
-   Некоторые онлайн-сервисы могут конвертировать JAR в EXE, например:
-   - jar2exe (https://www.jar2exe.com/)
-   - Exe4j (https://www.ej-technologies.com/products/exe4j/overview.html)
+   ```
+   jpackage --input target/ --main-jar FinanceManager-1.0-SNAPSHOT.jar --main-class com.financemanager.Main --name "ФинансовыйМенеджер" --app-version 1.0 --vendor "Your Name" --win-menu --win-shortcut
+   ```
+
+   Это создаст полноценный установщик Windows с JRE.
 
 ### Создание дистрибутива
 
