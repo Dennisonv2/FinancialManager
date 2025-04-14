@@ -1,101 +1,71 @@
 @echo off
-echo ===== Создание .exe файла для приложения Финансовый Менеджер =====
+:: Script to create executable for Finance Manager App
+
+echo === Finance Manager - EXE Creation Tool ===
 echo.
 
-REM Проверка наличия Java
-java -version 2>NUL
+:: Check if Maven is installed
+mvn -v >nul 2>&1
 if %ERRORLEVEL% NEQ 0 (
-    echo [31mОшибка: Java не установлена. Пожалуйста, установите Java 17 или выше.[0m
-    goto :error
+    echo Error: Maven not found.
+    echo Please install Maven and try again.
+    pause
+    exit /b 1
 )
 
-REM Проверка наличия Maven
-mvn -version 2>NUL
+:: Check if Java is installed
+java -version >nul 2>&1
 if %ERRORLEVEL% NEQ 0 (
-    echo [31mОшибка: Maven не установлен. Пожалуйста, установите Maven 3.8.0 или выше.[0m
-    goto :error
+    echo Error: Java not found.
+    echo Please install Java 17 or later and try again.
+    pause
+    exit /b 1
 )
 
-echo Очистка и сборка проекта...
+echo Step 1: Cleaning and packaging the application...
 call mvn clean package
 
 if %ERRORLEVEL% NEQ 0 (
-    echo [31mОшибка: Не удалось собрать проект.[0m
-    goto :error
-)
-
-echo [32mСборка завершена успешно![0m
-
-if exist "target\FinanceManager.exe" (
-    echo [32mФайл .exe успешно создан: target\FinanceManager.exe[0m
-) else (
-    echo [33mПредупреждение: Файл .exe не был создан автоматически.[0m
-    echo [33mВозможно, не настроен плагин Launch4j или отсутствуют зависимости.[0m
-    echo.
-    echo [33mПожалуйста, выберите вариант действий:[0m
-    echo [33m1. Использовать jpackage для создания установщика (рекомендуется, требуется JDK 14+)[0m
-    echo [33m2. Использовать Launch4j GUI для создания .exe файла[0m
-    echo [33m3. Продолжить без создания .exe (использовать JAR-файл)[0m
-    
-    choice /C 123 /M "Выберите вариант (1-3): "
-    
-    if %ERRORLEVEL% EQU 1 (
-        echo.
-        echo Создание установщика с помощью jpackage...
-        
-        REM Проверка наличия jpackage
-        jpackage --version 2>NUL
-        if %ERRORLEVEL% NEQ 0 (
-            echo [31mОшибка: jpackage не найден. Убедитесь, что у вас установлен JDK 14 или выше.[0m
-            goto :error
-        )
-        
-        jpackage --input target/ ^
-          --main-jar FinanceManager-1.0-SNAPSHOT.jar ^
-          --main-class com.financemanager.Main ^
-          --name "FinансовыйМенеджер" ^
-          --app-version 1.0 ^
-          --win-menu ^
-          --win-shortcut
-          
-        if %ERRORLEVEL% NEQ 0 (
-            echo [31mОшибка: Не удалось создать установщик с помощью jpackage.[0m
-            goto :error
-        )
-        
-        echo [32mУстановщик успешно создан![0m
-    )
-    
-    if %ERRORLEVEL% EQU 2 (
-        echo.
-        echo [33mДля использования Launch4j GUI:[0m
-        echo [33m1. Запустите Launch4j[0m
-        echo [33m2. Укажите JAR файл: %CD%\target\FinanceManager-1.0-SNAPSHOT.jar[0m
-        echo [33m3. Укажите выходной .exe файл: %CD%\target\FinanceManager.exe[0m
-        echo [33m4. Укажите Main класс: com.financemanager.Main[0m
-        echo [33m5. Укажите минимальную версию JRE: 17.0.0[0m
-        echo [33m6. Нажмите "Build wrapper"[0m
-    )
-    
-    if %ERRORLEVEL% EQU 3 (
-        echo.
-        echo [33mДля запуска JAR-файла используйте команду:[0m
-        echo [33mjava -jar target\FinanceManager-1.0-SNAPSHOT.jar[0m
-    )
+    echo Error: Maven build failed.
+    pause
+    exit /b 1
 )
 
 echo.
-echo Для получения дополнительной информации о создании .exe файла, 
-echo смотрите docs\CREATE_EXE_GUIDE.md
-echo.
-goto :eof
+echo Step 2: Checking that executable has been created...
 
-:error
-echo.
-echo [31mПроцесс завершился с ошибкой.[0m
-echo.
-pause
-exit /b 1
+:: Check if the executable JAR exists
+set JAR_PATH=target\FinanceManager-executable-1.0-SNAPSHOT.jar
+if not exist "%JAR_PATH%" (
+    echo Error: Executable JAR not found at %JAR_PATH%
+    pause
+    exit /b 1
+)
 
-:eof
+:: Check if the EXE exists
+set EXE_PATH=target\FinanceManager.exe
+if not exist "%EXE_PATH%" (
+    echo Warning: EXE file was not created.
+    echo Only JAR file is available for distribution.
+    goto CONTINUE_WITHOUT_EXE
+)
+
+echo.
+echo Step 3: Success! EXE file created successfully.
+echo.
+echo The executable file is located at: %EXE_PATH%
+echo.
+echo You can now copy this file to any Windows computer.
+echo NOTE: The user must have Java 17 or later installed.
+goto END
+
+:CONTINUE_WITHOUT_EXE
+echo.
+echo You can still use the JAR file at: %JAR_PATH%
+echo Use run_finance_manager.bat to launch the application.
+echo.
+
+:END
+echo.
+echo === Creation Process Complete ===
 pause

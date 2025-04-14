@@ -1,58 +1,38 @@
 @echo off
-echo ===== Запуск приложения Финансовый Менеджер =====
-echo.
+:: Finance Manager launcher for Windows
+echo === Starting Finance Manager Application ===
 
-REM Проверка наличия Java
-java -version 2>NUL
+:: Check if Java is installed
+java -version >nul 2>&1
 if %ERRORLEVEL% NEQ 0 (
-    echo [31mОшибка: Java не установлена. Пожалуйста, установите Java 17 или выше.[0m
-    goto :error
+    echo Error: Java not found.
+    echo Please install Java 17 or later and try again.
+    pause
+    exit /b 1
 )
 
-REM Проверка наличия JAR-файла
-if not exist "target\FinanceManager-1.0-SNAPSHOT.jar" (
-    echo JAR-файл не найден. Запуск сборки проекта...
-    
-    REM Проверка наличия Maven
-    mvn -version 2>NUL
-    if %ERRORLEVEL% NEQ 0 (
-        echo [31mОшибка: Maven не установлен. Пожалуйста, установите Maven 3.8.0 или выше.[0m
-        goto :error
-    )
-    
-    call mvn clean package
-    
-    if %ERRORLEVEL% NEQ 0 (
-        echo [31mОшибка: Не удалось собрать проект.[0m
-        goto :error
-    )
+:: Set path to the JAR file
+set JAR_PATH=target\FinanceManager-executable-1.0-SNAPSHOT.jar
+
+:: Check if JAR file exists
+if not exist "%JAR_PATH%" (
+    echo Error: Application JAR file not found at %JAR_PATH%
+    echo Please build the application first using 'mvn clean package'
+    pause
+    exit /b 1
 )
 
-echo Запуск приложения...
-java --module-path "target\dependency" --add-modules javafx.controls,javafx.fxml -jar target\FinanceManager-1.0-SNAPSHOT.jar
+:: Run the application with JavaFX modules
+echo Starting Finance Manager...
+java --module-path "%JAVA_HOME%\javafx-sdk-17\lib" --add-modules javafx.controls,javafx.fxml -jar %JAR_PATH%
 
+:: If we get here, there was an error
 if %ERRORLEVEL% NEQ 0 (
-    echo [31mОшибка при запуске приложения.[0m
-    echo [33mПопытка альтернативного запуска...[0m
-    
-    REM Альтернативный способ запуска в случае проблем с JavaFX
-    java -jar target\FinanceManager-1.0-SNAPSHOT.jar
-    
-    if %ERRORLEVEL% NEQ 0 (
-        echo [31mНе удалось запустить приложение.[0m
-        goto :error
-    )
+    echo.
+    echo === ALTERNATIVE LAUNCH METHOD ===
+    echo Trying alternative launch method with system JavaFX...
+    echo.
+    java -jar %JAR_PATH%
 )
 
-goto :eof
-
-:error
-echo.
-echo [31mПроцесс завершился с ошибкой.[0m
-echo.
-pause
-exit /b 1
-
-:eof
-echo.
 pause

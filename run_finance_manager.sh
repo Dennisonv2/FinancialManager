@@ -1,27 +1,43 @@
 #!/bin/bash
+# Finance Manager launcher for Linux/Mac
 
-echo "Запуск Менеджера Финансов..."
+echo "=== Starting Finance Manager Application ==="
 
 # Check if Java is installed
 if ! command -v java &> /dev/null; then
-    echo "Java не установлен или отсутствует в PATH. Пожалуйста, установите Java 17 или выше."
+    echo "Error: Java not found."
+    echo "Please install Java 17 or later and try again."
     exit 1
 fi
 
-# Run the application with JavaFX
-echo "Запуск приложения..."
+# Set path to the JAR file
+JAR_PATH="target/FinanceManager-executable-1.0-SNAPSHOT.jar"
 
-# Try to run with Maven if available
-if command -v mvn &> /dev/null; then
-    echo "Запуск через Maven..."
-    mvn compile && mvn javafx:run
+# Check if JAR file exists
+if [ ! -f "$JAR_PATH" ]; then
+    echo "Error: Application JAR file not found at $JAR_PATH"
+    echo "Please build the application first using 'mvn clean package'"
+    exit 1
+fi
+
+# Run the application with JavaFX modules
+echo "Starting Finance Manager..."
+
+# Try with JavaFX path if JAVAFX_HOME is set
+if [ ! -z "$JAVAFX_HOME" ]; then
+    java --module-path "$JAVAFX_HOME/lib" --add-modules javafx.controls,javafx.fxml -jar "$JAR_PATH"
 else
-    # Check if the JAR file exists
-    if [ -f "target/FinanceManager-1.0-SNAPSHOT.jar" ]; then
-        echo "Запуск через JAR файл..."
-        java --module-path lib --add-modules javafx.controls,javafx.fxml -jar target/FinanceManager-1.0-SNAPSHOT.jar
-    else
-        echo "JAR файл не найден. Пожалуйста, соберите проект с помощью Maven: mvn clean package"
-        exit 1
+    # Try with Java's module path
+    java --module-path "$JAVA_HOME/lib" --add-modules javafx.controls,javafx.fxml -jar "$JAR_PATH"
+    
+    # If that fails, try direct jar launch as a fallback
+    if [ $? -ne 0 ]; then
+        echo ""
+        echo "=== ALTERNATIVE LAUNCH METHOD ==="
+        echo "Trying alternative launch method with system JavaFX..."
+        echo ""
+        java -jar "$JAR_PATH"
     fi
 fi
+
+echo "Application closed."
