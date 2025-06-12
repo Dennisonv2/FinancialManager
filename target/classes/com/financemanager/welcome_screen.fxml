@@ -10,14 +10,9 @@
       <!-- Заголовок приложения -->
       <VBox alignment="CENTER" spacing="20.0" VBox.vgrow="ALWAYS">
          <children>
-            <Label styleClass="app-title" text="Finance Manager">
+            <Label styleClass="app-title" text="Финансовый менеджер">
                <font>
                   <Font name="Arial Bold" size="48.0" />
-               </font>
-            </Label>
-            <Label styleClass="app-subtitle" text="Персональный финансовый менеджер">
-               <font>
-                  <Font name="Arial" size="18.0" />
                </font>
             </Label>
             <Label styleClass="app-description" text="Управляйте своими финансами легко и эффективно" wrapText="true">

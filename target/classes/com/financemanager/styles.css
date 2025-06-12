@@ -1,11 +1,12 @@
 .root {
     -fx-font-family: "Arial";
     -fx-font-size: 12px;
-    -fx-background-color: #f4f4f4;
+    -fx-background-color: rgb(8, 14, 32);
 }
 
 .label {
     -fx-font-size: 12px;
+    -fx-text-fill: white;
 }
 
 .button {
@@ -55,10 +56,15 @@
 }
 
 .table-view {
-    -fx-background-color: white;
+    -fx-background-color: rgb(15, 25, 45);
     -fx-background-radius: 4;
-    -fx-border-color: #dddddd;
+    -fx-border-color: #555555;
     -fx-border-radius: 4;
+}
+
+.table-view .table-cell {
+    -fx-text-fill: white;
+    -fx-background-color: rgb(15, 25, 45);
 }
 
 .table-view .column-header {
@@ -76,13 +82,22 @@
 }
 
 .tab-pane {
-    -fx-border-color: #dddddd;
+    -fx-border-color: #555555;
     -fx-border-radius: 4;
+    -fx-background-color: rgb(8, 14, 32);
+}
+
+.tab-pane .tab-header-area {
+    -fx-background-color: rgb(8, 14, 32);
 }
 
 .tab {
-    -fx-background-color: #f0f0f0;
+    -fx-background-color: rgb(20, 30, 50);
     -fx-font-weight: bold;
+}
+
+.tab .tab-label {
+    -fx-text-fill: white;
 }
 
 .tab:selected {
@@ -94,9 +109,15 @@
 }
 
 .text-field, .combo-box, .date-picker {
-    -fx-background-color: white;
-    -fx-border-color: #cccccc;
+    -fx-background-color: rgb(25, 35, 55);
+    -fx-text-fill: white;
+    -fx-border-color: #555555;
     -fx-border-radius: 4;
+}
+
+.combo-box .list-cell {
+    -fx-background-color: rgb(25, 35, 55);
+    -fx-text-fill: white;
 }
 
 .text-field:focused, .combo-box:focused, .date-picker:focused {
@@ -105,18 +126,18 @@
 
 /* Стили для экрана приветствия */
 .app-title {
-    -fx-text-fill: #2c3e50;
+    -fx-text-fill: white;
     -fx-font-weight: bold;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 2, 0, 1, 1);
+    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.3), 2, 0, 1, 1);
 }
 
 .app-subtitle {
-    -fx-text-fill: #34495e;
+    -fx-text-fill: #c0c0c0;
     -fx-font-style: italic;
 }
 
 .app-description {
-    -fx-text-fill: #7f8c8d;
+    -fx-text-fill: #a0a0a0;
     -fx-text-alignment: center;
 }
 
@@ -145,6 +166,6 @@
 }
 
 .version-info {
-    -fx-text-fill: #95a5a6;
+    -fx-text-fill: #808080;
     -fx-font-style: italic;
 }
