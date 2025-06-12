@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.financemanager.WelcomeController">
+   <children>
+      <!-- Заголовок приложения -->
+      <VBox alignment="CENTER" spacing="20.0" VBox.vgrow="ALWAYS">
+         <children>
+            <Label styleClass="app-title" text="Finance Manager">
+               <font>
+                  <Font name="Arial Bold" size="48.0" />
+               </font>
+            </Label>
+            <Label styleClass="app-subtitle" text="Персональный финансовый менеджер">
+               <font>
+                  <Font name="Arial" size="18.0" />
+               </font>
+            </Label>
+            <Label styleClass="app-description" text="Управляйте своими финансами легко и эффективно" wrapText="true">
+               <font>
+                  <Font name="Arial" size="14.0" />
+               </font>
+            </Label>
+         </children>
+         <padding>
+            <Insets bottom="30.0" left="30.0" right="30.0" top="50.0" />
+         </padding>
+      </VBox>
+      
+      <!-- Кнопка запуска -->
+      <VBox alignment="CENTER" spacing="20.0">
+         <children>
+            <Button fx:id="launchButton" mnemonicParsing="false" onAction="#launchApplication" prefHeight="60.0" prefWidth="250.0" styleClass="launch-button" text="Запустить приложение">
+               <font>
+                  <Font name="Arial Bold" size="16.0" />
+               </font>
+            </Button>
+            <Label styleClass="version-info" text="Версия 1.0">
+               <font>
+                  <Font name="Arial" size="12.0" />
+               </font>
+            </Label>
+         </children>
+         <padding>
+            <Insets bottom="50.0" left="30.0" right="30.0" top="30.0" />
+         </padding>
+      </VBox>
+   </children>
+</VBox>

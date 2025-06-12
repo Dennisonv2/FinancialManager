@@ -43,38 +43,27 @@ public class Main extends Application {
     }
     
     /**
-     * Initializes the JavaFX stage and sets up the main window
+     * Initializes the JavaFX stage and sets up the welcome screen
      * @param primaryStage The primary stage for this application
      */
     @Override
     public void start(Stage primaryStage) throws Exception {
         try {
-            // Connect to the database
-            dataAccess = new DataAccess();
-            dataAccess.connect();
-            dataAccess.createTablesIfNotExist();
-            
-            // Load the FXML file for the main window
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/financemanager/main_window.fxml"));
+            // Load the welcome screen FXML
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/financemanager/welcome_screen.fxml"));
             Parent root = loader.load();
             
-            // Get the controller and set the data access object
-            Controller controller = loader.getController();
-            controller.setDataAccess(dataAccess);
-            
-            // Set up the stage
-            primaryStage.setTitle("Финансовый менеджер");
-            primaryStage.setScene(new Scene(root));
-            primaryStage.setMinWidth(800);
-            primaryStage.setMinHeight(600);
+            // Set up the stage with welcome screen
+            primaryStage.setTitle("Finance Manager - Добро пожаловать");
+            Scene scene = new Scene(root, 600, 500);
+            scene.getStylesheets().add(getClass().getResource("/com/financemanager/styles.css").toExternalForm());
+            primaryStage.setScene(scene);
+            primaryStage.setResizable(false);
+            primaryStage.centerOnScreen();
             primaryStage.show();
             
-            // Add CSS for styling
-            Scene scene = primaryStage.getScene();
-            scene.getStylesheets().add(getClass().getResource("/com/financemanager/styles.css").toExternalForm());
-            
         } catch (Exception e) {
-            System.err.println("Error initializing application: " + e.getMessage());
+            System.err.println("Error initializing welcome screen: " + e.getMessage());
             e.printStackTrace();
             throw e;
         }

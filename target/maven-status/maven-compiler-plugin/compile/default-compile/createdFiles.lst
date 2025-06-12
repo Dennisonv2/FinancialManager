@@ -2,6 +2,7 @@ com/financemanager/DataAccess.class
 com/financemanager/Controller$3.class
 com/financemanager/Transaction.class
 com/financemanager/Controller.class
+com/financemanager/WelcomeController.class
 com/financemanager/Controller$5.class
 com/financemanager/Main.class
 com/financemanager/Controller$4.class

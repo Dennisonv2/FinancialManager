@@ -27,11 +27,8 @@ author = "agent"
 agentRequireRestartOnSave = false
 
 [[workflows.workflow.tasks]]
-task = "packager.installForAll"
-
-[[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "mvn clean compile && ./test_app.sh"
+args = "java -jar target/FinanceManager-executable-1.0-SNAPSHOT.jar"
 
 [[workflows.workflow]]
 name = "Finance Manager Test App"
@@ -48,4 +45,4 @@ task = "shell.exec"
 args = "./test_app.sh"
 
 [deployment]
-run = ["sh", "-c", "mvn clean compile && ./test_app.sh"]
+run = ["sh", "-c", "java -jar target/FinanceManager-executable-1.0-SNAPSHOT.jar"]
